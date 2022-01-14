@@ -16,6 +16,11 @@ export const styles = StyleSheet.create({
     color: '#ffffff'
   },
 
+  TextError: {
+    color: '#800020',
+    marginTop: 10
+  },
+
   Input: {
     alignItems: "center",
     backgroundColor: '#21262d',

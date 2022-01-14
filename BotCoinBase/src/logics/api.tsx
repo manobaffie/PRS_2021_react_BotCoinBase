@@ -1,27 +1,21 @@
 import crypto from 'crypto';
 
-// export interface PropsApi {
-//   api_key: string;
-//   secret_key: string;
-// }
-
-// interface State {
-// }
-
 class Api {
 
   private static _instance: Api;
 
   private api_key: string;
   private secret_key: string;
+  private connected: boolean;
 
   private constructor() {
-    // if (Api._instance) {
-    //   throw new Error("Error: Instantiation failed: Use Api.Instance() instead of new.");
-    // }
+    if (Api._instance) {
+      throw new Error("Error: Instantiation failed: Use Api.Instance() instead of new.");
+    }
 
     this.api_key = '';
     this.secret_key = '';
+    this.connected = false;
   }
 
   public static get Instance() {
@@ -36,12 +30,15 @@ class Api {
     this.secret_key = key;
   }
 
+  public get isConnected() : boolean {
+    return this.connected;
+  }
+  
+
   private Headers(method: string, path: string, body: string) {
-    let timesTamp = String(Number(Date.now())).slice(0, -3);
+    const timesTamp = String(Number(Date.now())).slice(0, -3);
 
-    console.log(this.api_key, this.secret_key);
-
-    let sign = crypto.createHmac(
+    const sign = crypto.createHmac(
       'sha256',
       this.secret_key
     ).update(
@@ -54,27 +51,29 @@ class Api {
       Accept: 'application/json',
       'CB-ACCESS-SIGN': sign,
       'CB-ACCESS-TIMESTAMP': timesTamp,
-      'CB-ACCESS-KEY': this.api_key,    
+      'CB-ACCESS-KEY': this.api_key,
+      'CB-VERSION': '2021-12-18'
     }
     return (headers);
   }
 
   private Request(url: string, path: string, method: string, body: string) {
 
-    let headers = this.Headers(method, path, body);
+    const headers = this.Headers(method, path, body);
 
-    let requestGet = {
+    const requestGet = {
       method: method,
       headers: headers,
     }
 
-    let requestPost = {
+    const requestPost = {
       method: method,
       headers: headers,
       body: body,
     }
 
-    return(fetch(url + path, (method == 'GET' ? requestGet : requestPost)
+    return(fetch(url + path,
+      (method == 'GET' ? requestGet : requestPost)
     ).then((resp) => resp.json()).then((json) => {
       return (json);
     }).catch((err) => {
@@ -83,7 +82,9 @@ class Api {
   }
 
   User() {
-    return(this.Request('https://api.coinbase.com', '/v2/user', 'GET', ''));
+    return(
+      this.Request('https://api.coinbase.com', '/v2/user', 'GET', '')
+    );
   }
 }
 

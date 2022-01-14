@@ -13,15 +13,19 @@ import { styles } from './styles'
 
 import Api from '../../logics/api';
 
+import autoLogin from './autoLogin'
 
 type authScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen = () => {
-
   const navigation = useNavigation<authScreenProp>();
+
+  const apiCoin = Api.Instance;
 
   const [api_key, setApi_key] = useState('');
   const [secret_key, setSecret_key] = useState('');
+
+  const [loginError, setLoginError] = useState('');
 
   return (
     <View style={styles.MainView}>
@@ -46,16 +50,28 @@ const LoginScreen = () => {
           styleButton = {styles.Button}
           styleText = {styles.Text}
           titleButton = "login"
-          onPressButton = { () => {
-            const apiCoin = Api.Instance;
+          onPressButton = { async () => {
+            if (api_key == '' || secret_key == '') {
+              apiCoin.ApiKey = autoLogin.api_key;
+              apiCoin.SecretKey = autoLogin.secret_key;
+            } else {
+              apiCoin.ApiKey = api_key;
+              apiCoin.SecretKey = secret_key;
+            }
 
-            apiCoin.ApiKey = api_key;
-            apiCoin.SecretKey = secret_key;
+            const User = await apiCoin.User();
 
-            navigation.navigate('Home');
+            if (User.errors !== undefined) {
+              for (let index = 0; index < User.errors.length; index++) {
+                const element = User.errors[index];
+                setLoginError(loginError + element.message + '\n');
+              }
+            } else {
+              navigation.navigate('Home');
+            }
           }}
         />
-
+        <Text style={styles.TextError}>{loginError}</Text>
       </View>
     </View>
   );
