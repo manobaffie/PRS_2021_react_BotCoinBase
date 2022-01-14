@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Button } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { RootStackParamList } from '../RootStackParams'
 
 import CustomInput from '../../components/customInput'
 import CustomButton from '../../components/customButton'
@@ -8,9 +13,13 @@ import { styles } from './styles'
 
 import Api from '../../logics/api';
 
+
+type authScreenProp = StackNavigationProp<RootStackParamList, 'Login'>;
+
 const LoginScreen = () => {
 
-  const [api, setApi] = useState(new Api({api_key: '', secret_key: ''}));
+  const navigation = useNavigation<authScreenProp>();
+
   const [api_key, setApi_key] = useState('');
   const [secret_key, setSecret_key] = useState('');
 
@@ -38,8 +47,12 @@ const LoginScreen = () => {
           styleText = {styles.Text}
           titleButton = "login"
           onPressButton = { () => {
-            setApi(new Api({api_key: api_key, secret_key: secret_key}));
-            api.User()
+            const apiCoin = Api.Instance;
+
+            apiCoin.ApiKey = api_key;
+            apiCoin.SecretKey = secret_key;
+
+            navigation.navigate('Home');
           }}
         />
 

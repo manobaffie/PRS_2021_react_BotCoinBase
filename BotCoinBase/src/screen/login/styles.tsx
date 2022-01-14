@@ -31,7 +31,6 @@ export const styles = StyleSheet.create({
   },
 
   View: {
-    // width: 400,
     padding: 30,
     backgroundColor: '#0d1117',
 

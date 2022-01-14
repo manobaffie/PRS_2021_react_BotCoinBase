@@ -1,27 +1,49 @@
-import { Component } from 'react';
 import crypto from 'crypto';
 
-export interface PropsApi {
-  api_key: string;
-  secret_key: string;
-}
+// export interface PropsApi {
+//   api_key: string;
+//   secret_key: string;
+// }
 
-interface State {
-}
+// interface State {
+// }
 
-class Api extends Component<PropsApi, State> {
-  constructor(props: PropsApi) {
-    super(props);
+class Api {
+
+  private static _instance: Api;
+
+  private api_key: string;
+  private secret_key: string;
+
+  private constructor() {
+    // if (Api._instance) {
+    //   throw new Error("Error: Instantiation failed: Use Api.Instance() instead of new.");
+    // }
+
+    this.api_key = '';
+    this.secret_key = '';
   }
 
-  Headers(method: string, path: string, body: string) {
+  public static get Instance() {
+    return (this._instance || (this._instance = new this()));
+  }
+
+  public set ApiKey(key: string) {
+    this.api_key = key;
+  }
+
+  public set SecretKey(key: string) {
+    this.secret_key = key;
+  }
+
+  private Headers(method: string, path: string, body: string) {
     let timesTamp = String(Number(Date.now())).slice(0, -3);
 
-    console.log(this.props.api_key, this.props.secret_key);
+    console.log(this.api_key, this.secret_key);
 
     let sign = crypto.createHmac(
       'sha256',
-      this.props.secret_key
+      this.secret_key
     ).update(
       timesTamp + method + path + (method == 'GET' ? '' : body)
     ).digest(
@@ -32,12 +54,12 @@ class Api extends Component<PropsApi, State> {
       Accept: 'application/json',
       'CB-ACCESS-SIGN': sign,
       'CB-ACCESS-TIMESTAMP': timesTamp,
-      'CB-ACCESS-KEY': this.props.api_key,    
+      'CB-ACCESS-KEY': this.api_key,    
     }
     return (headers);
   }
 
-  Request(url: string, path: string, method: string, body: string) {
+  private Request(url: string, path: string, method: string, body: string) {
 
     let headers = this.Headers(method, path, body);
 
