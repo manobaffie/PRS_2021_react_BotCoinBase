@@ -1,12 +1,16 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+
   profileImage: {
     width: 50,
     height: 50,
   },
 
   View: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+
     margin:30,
     padding: 30,
     backgroundColor: '#0d1117',

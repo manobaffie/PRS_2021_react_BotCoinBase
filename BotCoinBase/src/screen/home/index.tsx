@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image } from 'react-native';
+import { View, Text, Button, Image, ActivityIndicator } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import Navigation from '../../Services/Navigation';
 
-import { RootStackParamList } from '../RootStackParams'
+import { styles } from './styles';
 
-import CustomInput from '../../components/customInput'
-import CustomButton from '../../components/customButton'
-
-import { styles } from './styles'
-
-import Api from '../../logics/api';
-
-type authScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
+import Api from '../../Services/Api';
 
 const HomeScreen = () => {
-  const navigation = useNavigation<authScreenProp>();
+  Navigation.Instance.me('Home');
 
   const apiCoin = Api.Instance;
 
@@ -25,31 +17,32 @@ const HomeScreen = () => {
 
   useEffect(() => {
     apiCoin.User().then(({data}) => {
-      console.log('called');
       setUser(data);
       setUserImage(data.avatar_url);
-      console.log('data.avatar_url: ', data.avatar_url);
     });
   }, [])
 
-  console.log(userImage);
-
   return (
     <View style={styles.MainView}>
-      <View style={styles.View}>
-        <Image
-            style={styles.profileImage}
-            source={{uri: userImage}}
-        />
+        {
+          (user === undefined) ? (
+            <View style={styles.View}>
+              <ActivityIndicator size='large' color='#457cb7' />
+            </View>
+          ) : (
+            <View style={styles.View}>
 
-        <CustomButton
-          titleButton = "test User"
-          onPressButton = { () => {
-            // navigation.navigate('Login');
-          }}
-        />
+              <View style={{ backgroundColor: "skyblue" }}>
+                <Text>this is a test 2</Text>
 
-      </View>
+                <Image
+                  style={styles.profileImage}
+                  source={{uri: userImage}}
+                />
+              </View>
+            </View>
+          )
+        }
     </View>
   );
 }

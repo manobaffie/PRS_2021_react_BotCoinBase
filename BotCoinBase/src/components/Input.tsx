@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleProp, TextStyle, TextInput } from 'react-native';
 
-class CustomInput extends Component<{
+class Input extends Component<{
   styleView?: StyleProp<TextStyle>;
   styleText?: StyleProp<TextStyle>;
   styleInput?: StyleProp<TextStyle>;
@@ -25,4 +25,4 @@ class CustomInput extends Component<{
   }
 }
 
-export default CustomInput;
+export default Input;

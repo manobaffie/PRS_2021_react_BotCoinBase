@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleProp, TextStyle } from 'react-native';
 
-class CustomBase extends Component<{
+class Base extends Component<{
   styleView?: StyleProp<TextStyle>;
 }> {
   render() {
@@ -12,4 +12,4 @@ class CustomBase extends Component<{
   }
 }
 
-export default CustomBase;
+export default Base;

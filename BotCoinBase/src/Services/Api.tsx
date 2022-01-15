@@ -10,7 +10,7 @@ class Api {
 
   private constructor() {
     if (Api._instance) {
-      throw new Error("Error: Instantiation failed: Use Api.Instance() instead of new.");
+      throw new Error("Error: Instantiation failed: Use \'Class\'.Instance() instead of new.");
     }
 
     this.api_key = '';
