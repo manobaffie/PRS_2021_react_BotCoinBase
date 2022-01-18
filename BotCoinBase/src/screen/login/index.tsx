@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import Navigation from '../../Services/Navigation';
 
 import Input from '../../components/Input';
+import ActivityIndicator from '../../components/ActivityIndicator';
 import LoginButton from './components/LoginButton';
 
 import { styles } from './styles';
@@ -16,6 +17,8 @@ const LoginScreen = () => {
   const [secret_key, setSecret_key] = useState('');
 
   const [loginError, setLoginError] = useState('');
+
+  const [activityIndicator, setActivityIndicator] = useState(false);
 
   return (
     <View style={styles.MainView}>
@@ -41,8 +44,14 @@ const LoginScreen = () => {
           secret_key= {secret_key}
           loginError= {loginError}
           setLoginError={setLoginError}
+          setActivityIndicator={setActivityIndicator}
         />
 
+        <ActivityIndicator
+          styleView = {styles.ActivityIndicator}
+          isDisplay = {activityIndicator}
+        />
+ 
         <Text style={styles.TextError}>{loginError}</Text>
       </View>
     </View>

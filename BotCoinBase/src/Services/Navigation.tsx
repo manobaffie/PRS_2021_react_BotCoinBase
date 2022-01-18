@@ -32,13 +32,13 @@ class Navigation {
     }
   }
 
-  public navigate(path: string) {
+  public navigate(path: string, params?: undefined) {
     switch (path) {
       case 'Login':
         this.navigation.navigate('Login');
         break;
       case 'Home':
-        this.navigation.navigate('Home');
+        this.navigation.navigate('Home', params);
         break;
       default:
         this.navigation.navigate('Login');

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   Button: {
@@ -49,5 +49,9 @@ export const styles = StyleSheet.create({
     backgroundColor: '#010409',
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  ActivityIndicator: {
+    marginTop: 10,
   }
 })

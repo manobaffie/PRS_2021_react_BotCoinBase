@@ -3,7 +3,7 @@ import { View, StyleProp, TextStyle, FlatList, Text } from 'react-native';
 
 class NavBar extends Component<{
   styleView?: StyleProp<TextStyle>;
-  ListData: [];
+  ListData: Array<any>;
   renderItem: Function;
 }> {
   render() {

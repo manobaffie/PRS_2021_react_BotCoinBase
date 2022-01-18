@@ -16,6 +16,7 @@ class LoginButton extends Component<{
   secret_key: string;
   loginError: string;
   setLoginError: Dispatch<SetStateAction<string>>;
+  setActivityIndicator: Dispatch<SetStateAction<boolean>>;
 }> {
   render() {
     const apiCoin = Api.Instance;
@@ -26,7 +27,7 @@ class LoginButton extends Component<{
           styleButton = {styles.Button}
           styleText = {styles.Text}
           titleButton = "login"
-          onPressButton = { async () => {
+          onPressButton = { () => {
             if (this.props.api_key == '' || this.props.secret_key == '') {
               apiCoin.ApiKey = autoLogin.api_key;
               apiCoin.SecretKey = autoLogin.secret_key;
@@ -35,16 +36,19 @@ class LoginButton extends Component<{
               apiCoin.SecretKey = this.props.secret_key;
             }
 
-            const User = await apiCoin.User();
+            this.props.setActivityIndicator(true);
 
-            if (User.errors !== undefined) {
-              for (let index = 0; index < User.errors.length; index++) {
-                const element = User.errors[index];
-                this.props.setLoginError(this.props.loginError + element.message + '\n');
+            apiCoin.User().then((User) => {
+              if (User.errors !== undefined) {
+                for (let index = 0; index < User.errors.length; index++) {
+                  const element = User.errors[index];
+                  this.props.setLoginError(this.props.loginError + element.message + '\n');
+                }
+              } else {
+                this.props.setActivityIndicator(false);
+                Navigation.Instance.navigate('Home', User.data);
               }
-            } else {
-              Navigation.Instance.navigate('Home');
-            }
+            });
           }}
         />
       </View>
